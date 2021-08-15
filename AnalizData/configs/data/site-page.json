@@ -1,0 +1,16 @@
+{
+  "site-pages": [
+    {
+      "site1": "localhost:8080"
+    },
+    {
+      "site2": "localhost:8080/registration"
+    },
+    {
+      "site3": "localhost:8080/login"
+    },
+    {
+      "site4": "localhost:8080/profile"
+    }
+  ]
+}

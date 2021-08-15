@@ -1,0 +1,4 @@
+Settings Kafka
+
+1. Zkserver (zookeeper)
+2. .\bin\windows\kafka-server-start.bat .\config\server.properties (Execute Kafka)
