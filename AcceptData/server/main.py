@@ -1,12 +1,18 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from kafka import KafkaProducer
+from AnalizeData.configs.config import ConfigKafka
+from settings import HOST_NAME, PORT_NUMBER, ROUTES, KAFKA_LOCALHOST
+import json
 import time
 
-HOST_NAME = 'localhost'
-PORT_NUMBER = 8000
-ROUTES = ["/", "/login", "/registration", "/profile"]
+_topics = ConfigKafka.parse_topics()
+_pages = ConfigKafka.parse_page()
 
 
 class Server(BaseHTTPRequestHandler):
+    producer = KafkaProducer(bootstrap_servers=KAFKA_LOCALHOST,
+                             value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+
     def do_GET(self):
         content = self.handle_http()
         self.wfile.write(content)
@@ -18,12 +24,16 @@ class Server(BaseHTTPRequestHandler):
 
         if self.path in ROUTES:
             if self.path == ROUTES[0]:
+                self.producer.send(_topics["topic"], {_pages["site1"]: 1})
                 response_content = "Hello!"
             elif self.path == ROUTES[1]:
+                self.producer.send(_topics["topic"], {_pages["site2"]: 1})
                 response_content = "Login site"
             elif self.path == ROUTES[2]:
+                self.producer.send(_topics["topic"], {_pages["site3"]: 1})
                 response_content = "Registration"
             elif self.path == ROUTES[3]:
+                self.producer.send(_topics["topic"], {_pages["site4"]: 1})
                 response_content = "Profile user"
         else:
             response_content = "404 Not Found"

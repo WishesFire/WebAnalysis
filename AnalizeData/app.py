@@ -2,7 +2,7 @@ import os
 import logging
 import sys
 import time
-from AnalizData.configs.config import LOG_DIR
+from AnalizeData.configs.config import LOG_DIR
 from datetime import datetime
 from .accept.activity import KafkaConnection
 

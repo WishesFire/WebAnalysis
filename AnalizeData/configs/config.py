@@ -1,15 +1,6 @@
 import os
 import json
-from dotenv import load_dotenv
-
-load_dotenv()
-LOG_DIR = "logs/"
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-INDEX_NAME = "web-analysis"
-PATH_FILE_BASIC = BASE_DIR + "\\data\\"
-
-KAFKA_LOCALHOST = "localhost:9092"
-GROUP_ID = "counters"
+from settings import PATH_FILE_BASIC
 
 
 class ConfigKafka:

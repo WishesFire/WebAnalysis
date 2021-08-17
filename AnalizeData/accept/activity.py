@@ -1,5 +1,6 @@
 from kafka import KafkaConsumer
-from AnalizData.configs.config import ConfigKafka, KAFKA_LOCALHOST, GROUP_ID
+from AnalizeData.configs.config import ConfigKafka
+from settings import KAFKA_LOCALHOST, GROUP_ID
 import logging
 import json
 
