@@ -1,5 +1,6 @@
 from kafka import KafkaConsumer
-from AnalizData.configs.config import ConfigKafka, KAFKA_LOCALHOST, GROUP_ID
+from AnalizeData.configs.config import ConfigKafka
+from settings import KAFKA_LOCALHOST, GROUP_ID
 import logging
 import json
 
@@ -25,6 +26,11 @@ class KafkaConnection:
         NEED To make json for save in elasticsearch
         """
         return json.dumps(data)
+
+    def get_data_consumer(self):
+        for msg in self.consumer:
+            # TODO передать данные
+            print(msg)
 
     def start(self):
         pass
