@@ -1,18 +1,20 @@
 from kafka import KafkaConsumer
 from AnalizeData.configs.config import ConfigKafka
-from settings import KAFKA_LOCALHOST, ROUTES
+from settings import KAFKA_LOCALHOST
+from AcceptData.server.main import run_server_forever
+import threading
 import requests
 
 
 class ServerKafkaTest:
     @staticmethod
-    def _visit_site_test(site):
-        response = requests.get(ROUTES[site])
+    def visit_site_test():
+        response = requests.get("http://localhost:8000/")
         if response.status_code is 200:
             print("Запрос отправлен")
 
     @staticmethod
-    def _get_info_test():
+    def get_info_test():
         _topics = ConfigKafka.parse_topics()
         consumer = KafkaConsumer(_topics["topic"], bootstrap_servers=KAFKA_LOCALHOST)
         for msg in consumer:
@@ -20,4 +22,8 @@ class ServerKafkaTest:
 
 
 if __name__ == '__main__':
-    pass
+    th = threading.Thread(target=run_server_forever)
+    th.start()
+
+    ServerKafkaTest.visit_site_test()
+    ServerKafkaTest.get_info_test()

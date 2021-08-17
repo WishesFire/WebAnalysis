@@ -2,9 +2,10 @@ import os
 import logging
 import sys
 import time
-from AnalizeData.configs.config import LOG_DIR
+from settings import LOG_DIR
 from datetime import datetime
 from .accept.activity import KafkaConnection
+from AnalizeData.models.database import DataBase
 
 
 def main():
@@ -32,6 +33,8 @@ def main():
         run_stat()
 
     try:
+        database = DataBase()
+        database.create_index()
         logging.info("Prepare Database")
 
     except Exception as err:
@@ -41,6 +44,8 @@ def main():
         while True:
             try:
                 kafka = KafkaConnection()
+                data = kafka.get_data_consumer()
+                database.push_store(data)
                 time.sleep(60)
             except Exception as err:
                 logging.error(f"Something happened, try to make. Error - {err}")

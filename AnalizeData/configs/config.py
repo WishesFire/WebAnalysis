@@ -9,7 +9,7 @@ class ConfigKafka:
         """
             /data/site-page.txt read pages from file
         """
-        path_file_pages = PATH_FILE_BASIC + "site-page.txt"
+        path_file_pages = PATH_FILE_BASIC + "site-page.json"
         if not os.path.exists(path_file_pages):
             return None
         with open(path_file_pages, "r") as reader:
@@ -21,7 +21,7 @@ class ConfigKafka:
         """
             /data/topics.txt read topics from file
         """
-        path_file_topics = PATH_FILE_BASIC + "topics.txt"
+        path_file_topics = PATH_FILE_BASIC + "topics.json"
         if not os.path.exists(path_file_topics):
             return None
         with open(path_file_topics, "r") as reader:

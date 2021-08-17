@@ -27,5 +27,10 @@ class KafkaConnection:
         """
         return json.dumps(data)
 
+    def get_data_consumer(self):
+        for msg in self.consumer:
+            # TODO передать данные
+            print(msg)
+
     def start(self):
         pass
