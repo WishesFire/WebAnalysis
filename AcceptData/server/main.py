@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from kafka import KafkaProducer
 from AnalizeData.configs.config import ConfigKafka
 from settings import HOST_NAME, PORT_NUMBER, ROUTES, KAFKA_LOCALHOST
+from socketserver import ThreadingMixIn
 import json
 import time
 
@@ -47,9 +48,13 @@ class Server(BaseHTTPRequestHandler):
         return bytes(response_content, "UTF-8")
 
 
+class ThreadingSimpleServer(ThreadingMixIn, HTTPServer):
+    pass
+
+
 def run_server_forever():
     server_address = (HOST_NAME, PORT_NUMBER)
-    http_serv = HTTPServer(server_address, Server)
+    http_serv = ThreadingSimpleServer(server_address, Server)
     try:
         print(time.asctime(), 'Server UP - %s:%s' % (HOST_NAME, PORT_NUMBER))
         http_serv.serve_forever()

@@ -34,7 +34,6 @@ def main():
 
     try:
         database = DataBase()
-        database.create_index()
         logging.info("Prepare Database")
 
     except Exception as err:
@@ -45,7 +44,7 @@ def main():
             try:
                 kafka = KafkaConnection()
                 data = kafka.get_data_consumer()
-                database.push_store(data)
+                database.push_store(dict(data))
                 time.sleep(60)
             except Exception as err:
                 logging.error(f"Something happened, try to make. Error - {err}")

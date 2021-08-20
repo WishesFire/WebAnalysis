@@ -1,5 +1,6 @@
 from elasticsearch import Elasticsearch
 from settings import HOST_NAME, HOST_ELASTIC, INDEX_NAME
+import json
 
 
 class DataBase:
@@ -7,48 +8,27 @@ class DataBase:
         self._connect_es = self._create_elastic_object()
 
     @staticmethod
-    def _create_elastic_object():
+    def _create_elastic_object() -> Elasticsearch:
         connect_es = Elasticsearch([{"host": HOST_NAME, "port": HOST_ELASTIC}])
         if not connect_es.ping():
             raise Exception("Database is error")
         return connect_es
 
-    def create_index(self):
-        settings = {
-            "settings": {
-                "number_of_shards": 1,
-                "number_of_replicas": 0
-            },
-            "mappings": {
-                "pages": {
-                    "dynamic": "strict",
-                    "properties": {
-                        "title": {
-                            "type": "text"
-                        },
-                        "counts": {
-                            "type": "integer"
-                        }
-                    }}}
-                }
-        try:
-            if not self._connect_es.indices.exists(INDEX_NAME):
-                self._connect_es.indices.create(index=INDEX_NAME, body=settings)
-
-        except Exception as err:
-            print(str(err))
-
-    def push_store(self, record):
-        outcome = self._connect_es.index(index=INDEX_NAME, doc_type="pages", body=record)
-        print(outcome)
+    def push_store(self, doc: dict) -> None:
+        outcome = self._connect_es.index(index=INDEX_NAME, doc_type="pages", body=doc)
         if not outcome['result']:
             raise Exception("Something happened")
 
-    def get_store(self, search):
-        """
-        {'query': {'match': {'calories': '102'}}}
-        '_source': ['title'], 'query': {'range': {'calories': {'gte': 20}}}}
-        json.dumps(search_object)
-        """
-        res = self._connect_es.search(index=INDEX_NAME, body=search)
-        return res
+    def get_all_store(self, search=None, save=False) -> None:
+        # TODO save to json file
+        if search:
+            res = self._connect_es.search(index=INDEX_NAME, body=search)
+            return res
+        else:
+            res = self._connect_es.search(index=INDEX_NAME, body={"query": {"match_all": {}}})
+            if not save:
+                for hit in res['hits']['hits']:
+                    print(hit)
+            else:
+                with open("data_file.json", "w") as write_file:
+                    json.dump(res, write_file)

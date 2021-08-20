@@ -7,9 +7,8 @@ import json
 
 class KafkaConnection:
     def __init__(self):
-        config = ConfigKafka()
-        self.pages = config.parse_page()
-        topics = config.parse_topics()
+        self.pages = ConfigKafka.parse_page()
+        topics = ConfigKafka.parse_topics()
         if topics and self.pages:
             print("All is good")
             logging.info("Kafka data preparing")
@@ -31,6 +30,4 @@ class KafkaConnection:
         for msg in self.consumer:
             # TODO передать данные
             print(msg)
-
-    def start(self):
-        pass
+            self._make_json_data(msg)
