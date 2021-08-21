@@ -3,6 +3,7 @@ from kafka import KafkaProducer
 from AnalizeData.configs.config import ConfigKafka
 from settings import HOST_NAME, PORT_NUMBER, ROUTES, KAFKA_LOCALHOST
 from socketserver import ThreadingMixIn
+from datetime import datetime
 import json
 import time
 
@@ -25,16 +26,16 @@ class Server(BaseHTTPRequestHandler):
 
         if self.path in ROUTES:
             if self.path == ROUTES[0]:
-                self.producer.send(_topics["topic"], {_pages["site-pages"][0]["site1"]: 1})
+                self.producer.send(_topics["topic"], {_pages["site-pages"][0]["site1"]: {1: datetime.now()}})
                 response_content = "Hello!"
             elif self.path == ROUTES[1]:
-                self.producer.send(_topics["topic"], {_pages["site-pages"][1]["site2"]: 1})
+                self.producer.send(_topics["topic"], {_pages["site-pages"][1]["site2"]: {1: datetime.now()}})
                 response_content = "Login site"
             elif self.path == ROUTES[2]:
-                self.producer.send(_topics["topic"], {_pages["site-pages"][2]["site3"]: 1})
+                self.producer.send(_topics["topic"], {_pages["site-pages"][2]["site3"]: {1: datetime.now()}})
                 response_content = "Registration"
             elif self.path == ROUTES[3]:
-                self.producer.send(_topics["topic"], {_pages["site-pages"][3]["site4"]: 1})
+                self.producer.send(_topics["topic"], {_pages["site-pages"][3]["site4"]: {1: datetime.now()}})
                 response_content = "Profile user"
         else:
             response_content = "404 Not Found"

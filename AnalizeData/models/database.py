@@ -20,7 +20,6 @@ class DataBase:
             raise Exception("Something happened")
 
     def get_all_store(self, search=None, save=False) -> None:
-        # TODO save to json file
         if search:
             res = self._connect_es.search(index=INDEX_NAME, body=search)
             return res

@@ -8,15 +8,17 @@ import requests
 
 class ServerKafkaTest:
     @staticmethod
-    def visit_site_test():
+    def visit_site_test() -> None:
         response = requests.get("http://localhost:8000/")
         if response.status_code is 200:
             print("Запрос отправлен")
 
     @staticmethod
-    def get_info_test():
+    def get_info_test() -> None:
         _topics = ConfigKafka.parse_topics()
-        consumer = KafkaConsumer(_topics["topic"], bootstrap_servers=KAFKA_LOCALHOST)
+        consumer = KafkaConsumer(_topics["topic"], bootstrap_servers=KAFKA_LOCALHOST,
+                                 auto_offset_reset='earliest',
+                                 enable_auto_commit=False, consumer_timeout_ms=1000)
         for msg in consumer:
             print(msg)
 

@@ -1,33 +1,31 @@
 from kafka import KafkaConsumer
 from AnalizeData.configs.config import ConfigKafka
-from settings import KAFKA_LOCALHOST, GROUP_ID
+from settings import KAFKA_LOCALHOST
 import logging
-import json
+import subprocess
 
 
 class KafkaConnection:
     def __init__(self):
         self.pages = ConfigKafka.parse_page()
-        topics = ConfigKafka.parse_topics()
-        if topics and self.pages:
+        self.topics = ConfigKafka.parse_topics()
+        if self.topics and self.pages:
             print("All is good")
             logging.info("Kafka data preparing")
-            self.consumer = KafkaConsumer(topics["topic"], bootstrap_servers=KAFKA_LOCALHOST,
-                                          auto_offset_reset='Early',
-                                          enable_auto_commit=True, group_id=GROUP_ID, consumer_timeout_ms=1000,
-                                          value_deserializer=lambda x: json.load(x.decode('utf-8')))
+            self.consumer = KafkaConsumer(self.topics["topic"], bootstrap_servers=KAFKA_LOCALHOST,
+                                          auto_offset_reset='earliest',
+                                          enable_auto_commit=False, consumer_timeout_ms=1000)
         else:
             raise Exception("File is not prepare")
 
-    @classmethod
-    def _make_json_data(cls, data: list):
-        """
-        NEED To make json for save in elasticsearch
-        """
-        return json.dumps(data)
-
-    def get_data_consumer(self):
+    def get_data_consumer(self) -> dict:
+        total = {}
         for msg in self.consumer:
-            # TODO передать данные
-            print(msg)
-            self._make_json_data(msg)
+            total.update(msg["value"].decode())
+
+        self._clear_kafka_topic()
+        return total
+
+    def _clear_kafka_topic(self):
+        subprocess.call(["/usr/bin/kafka-topics", "--zookeeper", "zookeeper-1:2181", "--delete", "--topic",
+                         self.topics["topic"]])
