@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 
 
 def prepare_info(_pages, cleaning=False):
-    current_time = None
     _visit_count_site = {}
 
     if cleaning:
