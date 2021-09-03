@@ -6,7 +6,6 @@ import os
 SERVER_NAME = "server-test"
 HOST_NAME = 'localhost'
 PORT_NUMBER = 8000
-# website urls
 ROUTES = ["/", "/login", "/registration", "/profile"]
 
 # [ANALYZE PART]

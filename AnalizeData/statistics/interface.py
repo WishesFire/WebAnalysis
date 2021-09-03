@@ -5,9 +5,13 @@ from abc import ABC, abstractmethod
 
 class IFabricStatistic(ABC):
     @abstractmethod
-    def prepare_data(self, data_from_elastic) -> dict:
+    def _prepare_data(self, *args, **kwargs) -> dict:
         pass
 
     @abstractmethod
-    def execute_stat(self):
+    def execute_stat(self, *args, **kwargs):
+        pass
+
+    @abstractmethod
+    def start(self, *args, **kwargs):
         pass
