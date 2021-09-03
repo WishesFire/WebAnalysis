@@ -19,17 +19,23 @@ class DataBaseTest:
     else:
         print('Awww it could not connect!')
 
-    doc = {'text': 'Elasticsearch312331231231: cool. bonsai cool.'}
-    res = es.index(index=INDEX_NAME, id=2, body=doc)
-    print(res["result"])
+    doc = {'text': 'cool. bonsai cool.'}
+    #res = es.index(index=INDEX_NAME, id=2, body=doc)
+    #print(res["result"])
 
     res = es.get(index=INDEX_NAME, id=2)
     print(res["_source"])
     es.indices.refresh(index=INDEX_NAME)
 
     res = es.search(index=INDEX_NAME, body={"query": {"match_all": {}}})
+    print(res)
     for hit in res['hits']['hits']:
         print(hit)
+
+    es.indices.delete(index=INDEX_NAME)
+
+    res = es.search(index=INDEX_NAME, body={"query": {"match_all": {}}})
+    print(res)
 
 
 if __name__ == '__main__':
