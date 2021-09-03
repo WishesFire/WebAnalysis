@@ -1,5 +1,6 @@
 from elasticsearch import Elasticsearch, exceptions
 from settings import HOST_NAME, HOST_ELASTIC, INDEX_NAME
+from AnalizeData.controller.data import AcceptData
 import json
 
 
@@ -30,7 +31,7 @@ class DataBase:
         except exceptions.NotFoundError:
             print("Index had already deleted")
 
-    def get_all_store(self, search=None, save=False) -> dict:
+    def get_all_store(self, search=None, save=False, only_all=False) -> dict:
         if search:
             res = self._connect_es.search(index=INDEX_NAME, body=search)
             return res
@@ -40,6 +41,11 @@ class DataBase:
                 self._save_file(res)
                 self.delete_store()
             else:
-                for hit in res['hits']['hits']:
-                    print(hit)
+                if only_all:
+                    full_res = AcceptData(**res)
+                    for elem in full_res:
+                        print(elem)
+                else:
+                    for hit in res['hits']['hits']:
+                        print(hit)
                 return res

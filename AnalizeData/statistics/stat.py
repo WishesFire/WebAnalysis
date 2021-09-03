@@ -9,7 +9,7 @@ class Statistics(IFabricStatistic):
         database = DataBase()
         return database.get_all_store()
 
-    def _prepare_data(self):
+    def _prepare_data(self, data):
         pass
 
     def execute_stat(self, data):
@@ -17,6 +17,7 @@ class Statistics(IFabricStatistic):
 
     def start(self):
         ready_data_elastic = self._get_data()
+        self._prepare_data(ready_data_elastic)
         self.execute_stat(ready_data_elastic)
 
     def __str__(self):
